@@ -1,0 +1,16 @@
+from psycopg.rows import dict_row
+from psycopg_pool import ConnectionPool
+
+from app.core.config import Settings
+
+
+def create_connection_pool(settings: Settings) -> ConnectionPool:
+    return ConnectionPool(
+        conninfo=settings.database_url,
+        min_size=1,
+        max_size=10,
+        open=False,
+        kwargs={
+            "row_factory": dict_row,
+        },
+    )
