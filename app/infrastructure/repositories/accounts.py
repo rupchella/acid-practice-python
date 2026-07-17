@@ -24,3 +24,14 @@ class AccountRepository:
             raise RuntimeError("Failed to create account")
 
         return account
+
+    def get_by_id(self, account_id: UUID) -> dict[str, Any] | None:
+        query = """
+            SELECT id, owner_id, balance, currency, created_at, updated_at
+            FROM accounts
+            WHERE id = %s;
+        """
+
+        with self.conn.cursor() as cur:
+            cur.execute(query, (account_id,))
+            return cur.fetchone()
